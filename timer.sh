@@ -26,12 +26,16 @@ function put_into_acme_auto {
 	mapfile -t subname_list_arr <<<"$(get_list)"
 
 	for ele in "${subname_list_arr[@]}"; do
+		local job_id=$(jobs | tail -n 1 | awk '{print $1}')
+		# being multi sub shell
 		{
+			printf "%s\n" "JOB ID: $job_id"
 			printf "%s\n" "CURRENT MODULE:$ele"
 			bash "${current_path}/auto_acme.sh" "${ele}"
 		} | flock "${log_path}" tee -a "${log_path}" &
 	done
 
+	# jobs >>"${log_path}"
 	wait
 	printf "\n%s\n" "----------------------------" >>"${log_path}"
 	printf "\n%s\n" "END TIME: $(date)" >>"${log_path}"
