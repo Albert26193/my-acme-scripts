@@ -43,4 +43,4 @@ function put_into_acme_auto {
 	return 0
 }
 
-put_into_acme_auto
+put_into_acme_auto 2>&1 >/dev/null
